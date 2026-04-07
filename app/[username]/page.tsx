@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import { motion } from "framer-motion";
 import ContributionGraph from "@/components/ContributionGraph";
 
+
 /* ================= TYPES ================= */
 
 type ContributionDay = {
@@ -23,15 +24,27 @@ type Stats = {
     repos: number;
     followers: number;
     stars: number;
+
+    pullRequests: number;
+    issues: number;
+    reposContributed: number;
+    totalContributions: number;
+    activeWeeks: number;
+
     score: number;
     grade: string;
+
     contributions: ContributionDay[];
+
     streak: {
         current: number;
         longest: number;
     };
+
     languages: Language[];
 };
+
+
 
 /* ================= PAGE ================= */
 
@@ -87,10 +100,12 @@ export default function Page() {
                             {/* LEFT: METRICS */}
                             <div className="grid grid-cols-2 gap-4 flex-1">
 
-                                <MetricBox isDark={isDark} label="Commits" value={data.commits} />
-                                <MetricBox isDark={isDark} label="Repository" value={data.repos} />
-                                <MetricBox isDark={isDark} label="Followers" value={data.followers} />
-                                <MetricBox isDark={isDark} label="Stars" value={data.stars} />
+                                <MetricBox isDark={isDark} label="Contribution" value={data.totalContributions} />
+                                <MetricBox isDark={isDark} label="Repositories" value={data.repos} />
+                                <MetricBox isDark={isDark} label="Pull Requests" value={data.pullRequests} />
+                                <MetricBox isDark={isDark} label="Issues" value={data.issues} />
+                                <MetricBox isDark={isDark} label="Repos Contributed" value={data.reposContributed} />
+                                <MetricBox isDark={isDark} label="Active Weeks" value= {`${data.activeWeeks} / 52 `} />
 
                             </div>
 
@@ -140,8 +155,8 @@ export default function Page() {
                             value={data.streak.current}
                         />
                         <MetricBox isDark={isDark} label="Longest" value={data.streak.longest} />
-                        <MetricBox isDark={isDark} label="Commits" value={data.commits} />
-                        <MetricBox isDark={isDark} label="Score" value={data.score} />
+                        <MetricBox isDark={isDark} label="Contributions (12 Months)" value={data.totalContributions} />
+                        <MetricBox isDark={isDark} label="Score" value={`${data.score}/100`} />
                     </div>
                 </Card>
 
@@ -211,34 +226,33 @@ const MetricBox = ({
 );
 
 const HighlightBox = ({
-  label,
-  value,
-  isDark,
+    label,
+    value,
+    isDark,
 }: {
-  label: string;
-  value: number;
-  isDark: boolean;
+    label: string;
+    value: number;
+    isDark: boolean;
 }) => (
-  <motion.div
-    whileHover={{ scale: 1.05 }}
-    className={`p-4 rounded-xl relative overflow-hidden
-      ${
-        isDark
-          ? "bg-orange-500/10 border border-orange-400/30 "
-          : "bg-orange-50 border border-orange-300 shadow-sm"
-      }`}
-  >
-    {/* 🔥 Glow effect */}
-    <div className="absolute inset-0 bg-linear-to-r from-orange-500/10 to-transparent opacity-40" />
+    <motion.div
+        whileHover={{ scale: 1.05 }}
+        className={`p-4 rounded-xl relative overflow-hidden
+      ${isDark
+                ? "bg-orange-500/10 border border-orange-400/30 "
+                : "bg-orange-50 border border-orange-300 shadow-sm"
+            }`}
+    >
+        {/* 🔥 Glow effect */}
+        <div className="absolute inset-0 bg-linear-to-r from-orange-500/10 to-transparent opacity-40" />
 
-    <p className="text-xs text-orange-300">{label}</p>
+        <p className="text-xs text-orange-300">{label}</p>
 
-    <p className="text-xl font-bold text-orange-400">
-        <span>🔥</span>
-      {value}
-      <span className="text-sm ml-1 opacity-70">days</span>
-    </p>
-  </motion.div>
+        <p className="text-xl font-bold text-orange-400">
+            <span>🔥</span>
+            {value}
+            <span className="text-sm ml-1 opacity-70">days</span>
+        </p>
+    </motion.div>
 );
 
 const ProgressBar = ({
