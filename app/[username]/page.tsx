@@ -52,6 +52,7 @@ export default function Page() {
     const { username } = useParams<{ username: string }>();
     const [data, setData] = useState<Stats | null>(null);
     const [isDark, setIsDark] = useState(true);
+    console.log(data?.streak.current);
 
     useEffect(() => {
         const media = window.matchMedia("(prefers-color-scheme: dark)");
@@ -100,12 +101,12 @@ export default function Page() {
                             {/* LEFT: METRICS */}
                             <div className="grid grid-cols-2 gap-4 flex-1">
 
-                                <MetricBox isDark={isDark} label="Contribution" value={data.totalContributions} />
+                                <MetricBox isDark={isDark} label="Commits" value={data.commits} />
                                 <MetricBox isDark={isDark} label="Repositories" value={data.repos} />
                                 <MetricBox isDark={isDark} label="Pull Requests" value={data.pullRequests} />
                                 <MetricBox isDark={isDark} label="Issues" value={data.issues} />
                                 <MetricBox isDark={isDark} label="Repos Contributed" value={data.reposContributed} />
-                                <MetricBox isDark={isDark} label="Active Weeks" value= {`${data.activeWeeks} / 52 `} />
+                                <MetricBox isDark={isDark} label="Active Weeks" value={`${data.activeWeeks} / 52 `} />
 
                             </div>
 
@@ -138,9 +139,13 @@ export default function Page() {
                     <Card isDark={isDark}>
                         <Title>Language Mastery</Title>
                         <div className="space-y-4 mt-4">
-                            {data.languages.map((l) => (
-                                <ProgressBar key={l.name} {...l} isDark={isDark} />
-                            ))}
+                            {Array.isArray(data.languages) && data.languages.length > 0 ? (
+                                data.languages.map((l) => (
+                                    <ProgressBar key={l.name} {...l} isDark={isDark} />
+                                ))
+                            ) : (
+                                <p className="text-sm text-gray-400">No language data</p>
+                            )}
                         </div>
                     </Card>
                 </div>
@@ -154,9 +159,14 @@ export default function Page() {
                             label="Current Streak"
                             value={data.streak.current}
                         />
-                        <MetricBox isDark={isDark} label="Longest" value={data.streak.longest} />
+                        <MetricBox isDark={isDark} label="Longest Streak" value={data.streak.longest} />
                         <MetricBox isDark={isDark} label="Contributions (12 Months)" value={data.totalContributions} />
-                        <MetricBox isDark={isDark} label="Score" value={`${data.score}/100`} />
+                        <div className="px-5 py-3 rounded-xl border border-white/10 bg-white/5">
+                            <p className="text-xs opacity-60">Status</p>
+                            <p className="text-lg font-semibold text-blue-400">
+                                {data.status}
+                            </p>
+                        </div>
                     </div>
                 </Card>
 
