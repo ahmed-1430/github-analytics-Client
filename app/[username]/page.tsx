@@ -155,11 +155,11 @@ export default function Page() {
 
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-4">
                         <HighlightBox
-                            label="Current"
+                            label="Current Streak"
                             value={currentStreak}
                             isDark={isDark}
                         />
-                        <MetricBox label="Longest" value={longestStreak} isDark={isDark} />
+                        <MetricBox label="Longest Streak" value={longestStreak} isDark={isDark} />
                         <MetricBox label="Contributions 12M" value={data.totalContributions} isDark={isDark} />
                         <MetricBox label="Active Weeks" value={`${data.activeWeeks}/52`} isDark={isDark} />
                     </div>
@@ -216,7 +216,7 @@ const HighlightBox = ({ label, value, isDark }: any) => (
     >
         <p className="text-xs text-orange-400">{label}</p>
         <p className="text-sm sm:text-lg font-bold text-orange-500">
-            🔥 {value}d
+            🔥 {value} Days
         </p>
     </div>
 );
