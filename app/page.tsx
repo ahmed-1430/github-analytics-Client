@@ -92,7 +92,7 @@ export default function Page() {
 // # 🔥 COMPONENTS
 const Card = ({ children }) => (
   <div className="relative p-6 rounded-2xl 
-    bg-gradient-to-br from-white/5 to-white/0
+    bg-linear-to-br from-white/5 to-white/0
     backdrop-blur-xl 
     border border-white/10
     shadow-[0_20px_80px_rgba(0,0,0,0.7)]

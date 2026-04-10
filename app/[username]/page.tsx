@@ -6,7 +6,7 @@ import { useParams } from "next/navigation";
 import { motion } from "framer-motion";
 import ContributionGraph from "@/components/ContributionGraph";
 
-/* ================= TYPES ================= */
+// TYPES ================= 
 
 type ContributionDay = {
     count: number;
@@ -44,7 +44,7 @@ type Stats = {
     contributions: ContributionDay[];
 };
 
-/* ================= PAGE ================= */
+// PAGE 
 
 export default function Page() {
     const { username } = useParams<{ username: string }>();
@@ -175,7 +175,7 @@ export default function Page() {
     );
 }
 
-/* ================= COMPONENTS ================= */
+//  COMPONENTS 
 
 const Card = ({ children, isDark }: any) => (
     <motion.div
