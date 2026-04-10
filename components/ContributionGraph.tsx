@@ -24,7 +24,7 @@ export default function ContributionGraph({
 }: {
   data?: ContributionDay[]; // ✅ allow undefined
 }) {
-  // ✅ SAFE DATA HANDLING
+  //  SAFE DATA HANDLING
   const safeData = Array.isArray(data) ? data : [];
 
   const chartData = safeData.slice(-30).map((d) => ({
@@ -32,7 +32,7 @@ export default function ContributionGraph({
     value: d.count,
   }));
 
-  // ✅ EMPTY STATE
+  //  EMPTY STATE
   if (chartData.length === 0) {
     return (
       <div className="h-72 flex items-center justify-center text-gray-400">
@@ -131,8 +131,16 @@ export default function ContributionGraph({
               strokeWidth: 2,
               fill: "#fff",
             }}
-            dot={(props: any) => {
+            dot={(props) => {
               const { cx, cy, payload } = props;
+              if (
+                typeof cx !== "number" ||
+                typeof cy !== "number" ||
+                !payload ||
+                typeof payload.value !== "number"
+              ) {
+                return null;
+              }
 
               // 🔥 Highlight peak point
               if (payload.value === peak.value) {

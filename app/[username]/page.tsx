@@ -5,8 +5,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { motion } from "framer-motion";
 import ContributionGraph from "@/components/ContributionGraph";
-
-// TYPES ================= 
+import FuturisticLoader from "@/components/FuturisticLoader";
 
 type ContributionDay = {
     count: number;
@@ -44,7 +43,9 @@ type Stats = {
     contributions: ContributionDay[];
 };
 
-// PAGE 
+const API_BASE_URL =
+    process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") ??
+    "https://git-stats-server-updated.vercel.app";
 
 export default function Page() {
     const { username } = useParams<{ username: string }>();
@@ -61,18 +62,14 @@ export default function Page() {
 
     useEffect(() => {
         if (!username) return;
-        fetch(`http://localhost:3000/api/stats?user=${username}`)
+        fetch(`${API_BASE_URL}/api/stats?user=${username}`)
             .then((res) => res.json())
             .then(setData)
             .catch(console.error);
     }, [username]);
 
     if (!data)
-        return (
-            <div className="h-screen flex items-center justify-center">
-                Loading...
-            </div>
-        );
+        return <FuturisticLoader label={`Locking onto ${username}`} />;
 
     const currentStreak = data.streak?.current ?? 0;
     const longestStreak = data.streak?.longest ?? 0;
@@ -87,7 +84,6 @@ export default function Page() {
         >
             <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 space-y-6">
 
-                {/* HEADER */}
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div>
                         <h1 className="text-2xl sm:text-3xl font-bold">{data.name}</h1>
@@ -96,7 +92,6 @@ export default function Page() {
                         </p>
                     </div>
 
-                    {/* STATUS */}
                     <div className="px-4 py-2 rounded-xl border border-white/10 bg-white/5 w-fit">
                         <p className="text-xs opacity-60">Status</p>
                         <p className="text-sm font-semibold text-blue-400">
@@ -105,16 +100,13 @@ export default function Page() {
                     </div>
                 </div>
 
-                {/* GRID */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-                    {/* ACTIVITY */}
                     <Card isDark={isDark}>
                         <Title>GitHub Activity</Title>
 
                         <div className="flex flex-col sm:flex-row gap-4 mt-4">
 
-                            {/* METRICS */}
                             <div className="grid grid-cols-2 gap-3 flex-1">
                                 <MetricBox label="Commits" value={data.commits} isDark={isDark} />
                                 <MetricBox label="Repository" value={data.repos} isDark={isDark} />
@@ -124,7 +116,6 @@ export default function Page() {
                                 <MetricBox label="Stars" value={data.stars} isDark={isDark} />
                             </div>
 
-                            {/* GRADE */}
                             <div className="flex justify-center items-center">
                                 <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-xl bg-blue-500/10 border border-white/10 flex flex-col items-center justify-center">
                                     <span className="text-2xl sm:text-3xl font-bold text-blue-400">
@@ -137,7 +128,6 @@ export default function Page() {
                         </div>
                     </Card>
 
-                    {/* LANGUAGES */}
                     <Card isDark={isDark}>
                         <Title>Language Mastery</Title>
 
@@ -149,7 +139,6 @@ export default function Page() {
                     </Card>
                 </div>
 
-                {/* CONSISTENCY */}
                 <Card isDark={isDark}>
                     <Title>Consistency</Title>
 
@@ -165,7 +154,6 @@ export default function Page() {
                     </div>
                 </Card>
 
-                {/* GRAPH */}
                 <Card isDark={isDark}>
                     <Title>Contribution Trend</Title>
                     <ContributionGraph data={data.contributions} />
@@ -174,8 +162,6 @@ export default function Page() {
         </div>
     );
 }
-
-//  COMPONENTS 
 
 const Card = ({ children, isDark }: any) => (
     <motion.div
