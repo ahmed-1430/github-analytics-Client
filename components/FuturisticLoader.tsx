@@ -12,10 +12,10 @@ export default function FuturisticLoader({
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#020617] text-white">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(56,189,248,0.10),transparent_30%),linear-gradient(180deg,#020617_0%,#07111f_55%,#020617_100%)]" />
-      <div className="absolute inset-0 opacity-20 [background-image:linear-gradient(rgba(148,163,184,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.08)_1px,transparent_1px)] [background-size:72px_72px]" />
+      <div className="absolute inset-0 opacity-20 bg-[linear-gradient(rgba(148,163,184,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.08)_1px,transparent_1px)] bg-size-[72px_72px]" />
 
       <motion.div
-        className="relative z-10 w-[min(92vw,28rem)] rounded-[2rem] border border-white/10 bg-slate-950/55 px-8 py-9 shadow-[0_24px_80px_rgba(2,6,23,0.55)] backdrop-blur-2xl"
+        className="relative z-10 w-[min(92vw,28rem)] rounded-4xl border border-white/10 bg-slate-950/55 px-8 py-9 shadow-[0_24px_80px_rgba(2,6,23,0.55)] backdrop-blur-2xl"
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.45, ease: "easeOut" }}
@@ -68,7 +68,7 @@ export default function FuturisticLoader({
           {["Fetching", "Hydrating", "Rendering"].map((item, index) => (
             <motion.div
               key={item}
-              className="rounded-2xl border border-white/8 bg-white/[0.03] px-3 py-4 text-center"
+              className="rounded-2xl border border-white/8 bg-white/3 px-3 py-4 text-center"
               animate={{ borderColor: ["rgba(255,255,255,0.08)", "rgba(103,232,249,0.22)", "rgba(255,255,255,0.08)"] }}
               transition={{ duration: 1.8, repeat: Infinity, delay: index * 0.2 }}
             >
