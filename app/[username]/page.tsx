@@ -5,11 +5,13 @@ import { useParams } from "next/navigation";
 import { motion } from "framer-motion";
 import ContributionGraph from "@/components/ContributionGraph";
 import FuturisticLoader from "@/components/FuturisticLoader";
+import ThemeToggle from "@/components/ThemeToggle";
 import Card from "@/components/dashboard/Card";
 import EmptyState from "@/components/dashboard/EmptyState";
 import HighlightBox from "@/components/dashboard/HighlightBox";
 import MetricBox from "@/components/dashboard/MetricBox";
 import ProgressBar from "@/components/dashboard/ProgressBar";
+import { useTheme } from "@/hooks/useTheme";
 
 type StatsResponse = {
   name?: string;
@@ -141,20 +143,12 @@ function normalizeDashboardData(
 
 export default function Page() {
   const { username } = useParams<{ username: string }>();
+  const { isDark, mounted, toggleTheme } = useTheme();
   const [state, setState] = useState<LoadState>({
     status: "loading",
     data: null,
     error: null,
   });
-  const [isDark, setIsDark] = useState(true);
-
-  useEffect(() => {
-    const media = window.matchMedia("(prefers-color-scheme: dark)");
-    const handleThemeChange = () => setIsDark(media.matches);
-    handleThemeChange();
-    media.addEventListener("change", handleThemeChange);
-    return () => media.removeEventListener("change", handleThemeChange);
-  }, []);
 
   useEffect(() => {
     if (!username) {
@@ -224,7 +218,7 @@ export default function Page() {
   }, [username]);
 
   if (state.status === "loading") {
-    return <FuturisticLoader label={`Loading DevInsight for ${username}`} />;
+    return <FuturisticLoader label={`Loading DevInsight for ${username}`} isDark={isDark} />;
   }
 
   if (state.status === "error") {
@@ -258,6 +252,9 @@ export default function Page() {
           transition={{ duration: 0.45, ease: "easeOut" }}
           className="space-y-6"
         >
+          <div className="flex justify-end">
+            {mounted ? <ThemeToggle isDark={isDark} onToggle={toggleTheme} /> : null}
+          </div>
           <header className="flex flex-col gap-4 rounded-[2rem] border px-5 py-5 sm:px-6 lg:flex-row lg:items-end lg:justify-between lg:py-6"
             style={{
               borderColor: isDark ? "rgba(255,255,255,0.08)" : "rgba(148,163,184,0.24)",
