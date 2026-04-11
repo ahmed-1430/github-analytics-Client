@@ -255,7 +255,7 @@ export default function Page() {
           <div className="flex justify-end">
             {mounted ? <ThemeToggle isDark={isDark} onToggle={toggleTheme} /> : null}
           </div>
-          <header className="flex flex-col gap-4 rounded-[2rem] border px-5 py-5 sm:px-6 lg:flex-row lg:items-end lg:justify-between lg:py-6"
+          <header className="flex flex-col gap-4 rounded-4xl border px-5 py-5 sm:px-6 lg:flex-row lg:items-end lg:justify-between lg:py-6"
             style={{
               borderColor: isDark ? "rgba(255,255,255,0.08)" : "rgba(148,163,184,0.24)",
               background: isDark ? "rgba(255,255,255,0.04)" : "rgba(255,255,255,0.76)",
@@ -291,7 +291,7 @@ export default function Page() {
                     <h2 className="mt-3 text-2xl font-semibold">Performance snapshot</h2>
                   </div>
 
-                  <div className={`flex h-24 w-24 shrink-0 flex-col items-center justify-center rounded-[1.5rem] border ${isDark ? "border-cyan-400/20 bg-cyan-400/8 text-cyan-200" : "border-cyan-200 bg-cyan-50 text-cyan-700"}`}>
+                  <div className={`flex h-24 w-24 shrink-0 flex-col items-center justify-center rounded-3xl border ${isDark ? "border-cyan-400/20 bg-cyan-400/8 text-cyan-200" : "border-cyan-200 bg-cyan-50 text-cyan-700"}`}>
                     <span className="text-3xl font-semibold">{data.grade}</span>
                     <span className="mt-1 text-[10px] uppercase tracking-[0.28em] opacity-70">Grade</span>
                   </div>

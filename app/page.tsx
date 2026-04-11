@@ -98,25 +98,25 @@ export default function Page() {
     state.status === "success"
       ? state.data
       : {
-          name: "DevInsight Demo",
-          commits: 1042,
-          repos: 32,
-          followers: 148,
-          stars: 61,
-          score: 92,
-          grade: "A+",
-          streak: { current: 41, longest: 88 },
-          languages: [
-            { name: "TypeScript", percent: 42 },
-            { name: "JavaScript", percent: 31 },
-            { name: "Python", percent: 17 },
-            { name: "Go", percent: 10 },
-          ],
-          contributions: Array.from({ length: 14 }, (_, index) => ({
-            date: `2026-04-${String(index + 1).padStart(2, "0")}`,
-            count: [3, 7, 5, 9, 4, 12, 8, 6, 10, 7, 11, 9, 13, 8][index],
-          })),
-        };
+        name: "DevInsight Demo",
+        commits: 1042,
+        repos: 32,
+        followers: 148,
+        stars: 61,
+        score: 92,
+        grade: "A+",
+        streak: { current: 41, longest: 88 },
+        languages: [
+          { name: "TypeScript", percent: 42 },
+          { name: "JavaScript", percent: 31 },
+          { name: "Python", percent: 17 },
+          { name: "Go", percent: 10 },
+        ],
+        contributions: Array.from({ length: 14 }, (_, index) => ({
+          date: `2026-04-${String(index + 1).padStart(2, "0")}`,
+          count: [3, 7, 5, 9, 4, 12, 8, 6, 10, 7, 11, 9, 13, 8][index],
+        })),
+      };
 
   function goToUsername(username: string) {
     const nextUsername = username.trim().replace(/^@+/, "");
@@ -131,7 +131,7 @@ export default function Page() {
   return (
     <div className={`min-h-screen overflow-x-hidden ${isDark ? "bg-[#020617] text-white" : "bg-[#f8fbff] text-slate-950"}`}>
       <div className={`absolute inset-0 ${isDark ? "bg-[radial-gradient(circle_at_top,rgba(34,211,238,0.12),transparent_26%),radial-gradient(circle_at_80%_20%,rgba(59,130,246,0.12),transparent_24%),linear-gradient(180deg,#020617_0%,#07111f_42%,#020617_100%)]" : "bg-[radial-gradient(circle_at_top,rgba(14,165,233,0.12),transparent_26%),radial-gradient(circle_at_80%_20%,rgba(59,130,246,0.08),transparent_24%),linear-gradient(180deg,#f8fbff_0%,#eef4fb_42%,#f8fbff_100%)]"}`} />
-      <div className={`absolute inset-0 bg-[linear-gradient(rgba(148,163,184,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.08)_1px,transparent_1px)] [background-size:72px_72px] ${isDark ? "opacity-20" : "opacity-30"}`} />
+      <div className={`absolute inset-0 bg-[linear-gradient(rgba(148,163,184,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.08)_1px,transparent_1px)] bg-size-[72px_72px] ${isDark ? "opacity-20" : "opacity-30"}`} />
 
       <div className="relative z-10">
         <main className="mx-auto max-w-7xl px-4 pb-20 pt-6 sm:px-6 lg:px-8">
@@ -395,7 +395,7 @@ export default function Page() {
             <motion.div
               whileHover={{ y: -4 }}
               transition={{ duration: 0.2 }}
-              className={`rounded-[2rem] border px-6 py-10 text-center backdrop-blur-2xl sm:px-10 ${isDark ? "border-white/10 bg-linear-to-br from-cyan-400/10 via-white/4 to-blue-500/10 shadow-[0_30px_100px_rgba(8,15,36,0.42)]" : "border-slate-200 bg-linear-to-br from-cyan-50 via-white to-blue-50 shadow-[0_24px_80px_rgba(148,163,184,0.16)]"}`}
+              className={`rounded-4xl border px-6 py-10 text-center backdrop-blur-2xl sm:px-10 ${isDark ? "border-white/10 bg-linear-to-br from-cyan-400/10 via-white/4 to-blue-500/10 shadow-[0_30px_100px_rgba(8,15,36,0.42)]" : "border-slate-200 bg-linear-to-br from-cyan-50 via-white to-blue-50 shadow-[0_24px_80px_rgba(148,163,184,0.16)]"}`}
             >
               <p className={`text-[11px] uppercase tracking-[0.38em] ${isDark ? "text-cyan-200/80" : "text-cyan-700/80"}`}>
                 Final call
