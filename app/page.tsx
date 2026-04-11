@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import FuturisticLoader from "@/components/FuturisticLoader";
 import FeatureCard from "@/components/marketing/FeatureCard";
@@ -48,11 +49,14 @@ const API_BASE_URL =
   "https://git-stats-server-updated.vercel.app";
 
 export default function Page() {
+  const router = useRouter();
   const [state, setState] = useState<LoadState>({
     status: "loading",
     data: null,
     error: null,
   });
+  const [usernameInput, setUsernameInput] = useState("");
+  const heroInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -111,6 +115,16 @@ export default function Page() {
           })),
         };
 
+  function goToUsername(username: string) {
+    const nextUsername = username.trim().replace(/^@+/, "");
+    if (!nextUsername) {
+      heroInputRef.current?.focus();
+      return;
+    }
+
+    router.push(`/${encodeURIComponent(nextUsername)}`);
+  }
+
   return (
     <div className="min-h-screen overflow-x-hidden bg-[#020617] text-white">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(34,211,238,0.12),transparent_26%),radial-gradient(circle_at_80%_20%,rgba(59,130,246,0.12),transparent_24%),linear-gradient(180deg,#020617_0%,#07111f_42%,#020617_100%)]" />
@@ -144,13 +158,37 @@ export default function Page() {
                   >
                     View Demo
                   </Link>
-                  <Link
-                    href={`/${DEFAULT_USERNAME}`}
+                  <button
+                    type="button"
+                    onClick={() => heroInputRef.current?.focus()}
                     className="inline-flex items-center justify-center rounded-full border border-white/12 bg-white/4 px-6 py-3 text-sm font-medium text-white backdrop-blur-xl transition hover:border-cyan-300/35 hover:bg-cyan-300/8"
                   >
                     Try Your Username
-                  </Link>
+                  </button>
                 </div>
+
+                <form
+                  className="mt-5 flex flex-col gap-3 sm:max-w-xl sm:flex-row"
+                  onSubmit={(event) => {
+                    event.preventDefault();
+                    goToUsername(usernameInput);
+                  }}
+                >
+                  <input
+                    ref={heroInputRef}
+                    type="text"
+                    value={usernameInput}
+                    onChange={(event) => setUsernameInput(event.target.value)}
+                    placeholder="Enter GitHub username"
+                    className="h-12 flex-1 rounded-full border border-white/12 bg-white/4 px-5 text-sm text-white outline-none backdrop-blur-xl placeholder:text-slate-500 focus:border-cyan-300/40"
+                  />
+                  <button
+                    type="submit"
+                    className="inline-flex h-12 items-center justify-center rounded-full bg-cyan-300 px-5 text-sm font-medium text-slate-950 transition hover:bg-cyan-200"
+                  >
+                    Generate Profile
+                  </button>
+                </form>
 
                 <div className="mt-10 flex flex-wrap items-center gap-6 text-sm text-slate-500">
                   <span>Shareable profiles</span>
@@ -351,12 +389,13 @@ export default function Page() {
                 >
                   View Demo
                 </Link>
-                <Link
-                  href={`/${DEFAULT_USERNAME}`}
+                <button
+                  type="button"
+                  onClick={() => heroInputRef.current?.focus()}
                   className="inline-flex items-center justify-center rounded-full border border-white/12 bg-white/4 px-6 py-3 text-sm font-medium text-white transition hover:border-cyan-300/35 hover:bg-cyan-300/8"
                 >
                   Try Your Username
-                </Link>
+                </button>
               </div>
             </motion.div>
           </section>
