@@ -1,136 +1,112 @@
 "use client";
 
 import {
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
   Area,
   AreaChart,
   CartesianGrid,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
 } from "recharts";
-
-/* ================= TYPES ================= */
+import EmptyState from "@/components/dashboard/EmptyState";
 
 type ContributionDay = {
   count: number;
   date: string;
 };
 
-/* ================= COMPONENT ================= */
+type ContributionGraphProps = {
+  data?: ContributionDay[];
+  isDark?: boolean;
+};
 
 export default function ContributionGraph({
   data,
-}: {
-  data?: ContributionDay[]; // ✅ allow undefined
-}) {
-  //  SAFE DATA HANDLING
+  isDark = true,
+}: ContributionGraphProps) {
   const safeData = Array.isArray(data) ? data : [];
 
-  const chartData = safeData.slice(-30).map((d) => ({
-    date: new Date(d.date),
-    value: d.count,
+  const chartData = safeData.slice(-30).map((day) => ({
+    date: new Date(day.date),
+    value: day.count,
   }));
 
-  //  EMPTY STATE
   if (chartData.length === 0) {
     return (
-      <div className="h-72 flex items-center justify-center text-gray-400">
-        No contribution data available
-      </div>
+      <EmptyState
+        title="No contribution data yet"
+        description="Once activity is available, DevInsight will chart the last 30 days here."
+        isDark={isDark}
+      />
     );
   }
 
-  //  FORMAT DATE
+  const peak = chartData.reduce((max, point) => (point.value > max.value ? point : max));
   const formatDate = (date: Date) =>
-    date.toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-    });
-
-  //  SAFE PEAK CALCULATION
-  const peak = chartData.reduce((max, d) =>
-    d.value > max.value ? d : max
-  );
+    date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 
   return (
-    <div className="h-72 w-full mt-4 relative">
+    <div className="relative mt-4 h-80 w-full">
       <ResponsiveContainer width="100%" height="100%">
-        <AreaChart data={chartData}>
-
-          {/* GRID */}
-          <CartesianGrid
-            stroke="rgba(255,255,255,0.05)"
-            vertical={false}
-          />
-
-          {/* GRADIENT */}
+        <AreaChart data={chartData} margin={{ top: 16, right: 12, bottom: 6, left: -18 }}>
           <defs>
-            <linearGradient id="areaGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#3b82f6" stopOpacity={0.5} />
-              <stop offset="100%" stopColor="#3b82f6" stopOpacity={0} />
+            <linearGradient id="contributionArea" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#38bdf8" stopOpacity={0.42} />
+              <stop offset="100%" stopColor="#38bdf8" stopOpacity={0.02} />
             </linearGradient>
           </defs>
 
-          {/* X AXIS */}
+          <CartesianGrid
+            vertical={false}
+            stroke={isDark ? "rgba(255,255,255,0.06)" : "rgba(15,23,42,0.08)"}
+          />
+
           <XAxis
             dataKey="date"
-            tickFormatter={(value) => formatDate(value)}
-            stroke="#64748b"
-            tick={{ fontSize: 11 }}
+            tickFormatter={(value: Date) => formatDate(value)}
+            tick={{ fontSize: 11, fill: isDark ? "#94a3b8" : "#64748b" }}
             axisLine={false}
             tickLine={false}
           />
 
-          {/* Y AXIS */}
           <YAxis
-            orientation="left"
-            domain={[0, "dataMax + 1"]}
-            ticks={[2, 4, 6, 8]}
-            stroke="#64748b"
-            tick={{ fontSize: 11 }}
+            stroke={isDark ? "#94a3b8" : "#64748b"}
+            tick={{ fontSize: 11, fill: isDark ? "#94a3b8" : "#64748b" }}
             axisLine={false}
             tickLine={false}
+            allowDecimals={false}
+            width={34}
           />
 
-          {/* TOOLTIP */}
           <Tooltip
-            cursor={{
-              stroke: "rgba(255,255,255,0.2)",
-              strokeWidth: 1,
-            }}
+            cursor={{ stroke: isDark ? "rgba(255,255,255,0.2)" : "rgba(15,23,42,0.15)", strokeWidth: 1 }}
             content={({ active, payload }) => {
-              if (!active || !payload?.length) return null;
+              if (!active || !payload?.length) {
+                return null;
+              }
 
-              const d = payload[0].payload;
+              const point = payload[0].payload as { date: Date; value: number };
 
               return (
-                <div className="px-3 py-2 rounded-lg bg-[#020617]/90 backdrop-blur-xl border border-white/10 shadow-xl">
-                  <p className="text-xs text-gray-400">
-                    {formatDate(d.date)}
+                <div className={`rounded-2xl border px-3 py-2 shadow-xl backdrop-blur-xl ${isDark ? "border-white/10 bg-slate-950/85 text-white" : "border-slate-200 bg-white/95 text-slate-900"}`}>
+                  <p className={`text-xs ${isDark ? "text-slate-400" : "text-slate-500"}`}>
+                    {formatDate(point.date)}
                   </p>
-                  <p className="text-sm font-semibold text-white">
-                    {d.value} contributions
-                  </p>
+                  <p className="mt-1 text-sm font-semibold">{point.value} contributions</p>
                 </div>
               );
             }}
           />
 
-          {/* AREA */}
           <Area
             type="monotone"
             dataKey="value"
-            stroke="#3b82f6"
+            stroke="#38bdf8"
             strokeWidth={2.5}
-            fill="url(#areaGradient)"
-            animationDuration={1200}
-            activeDot={{
-              r: 6,
-              stroke: "#3b82f6",
-              strokeWidth: 2,
-              fill: "#fff",
-            }}
+            fill="url(#contributionArea)"
+            animationDuration={1100}
+            activeDot={{ r: 5, stroke: "#38bdf8", strokeWidth: 2, fill: "#ffffff" }}
             dot={(props) => {
               const { cx, cy, payload } = props;
               if (
@@ -142,20 +118,16 @@ export default function ContributionGraph({
                 return null;
               }
 
-              // 🔥 Highlight peak point
               if (payload.value === peak.value) {
                 return (
                   <circle
                     cx={cx}
                     cy={cy}
                     r={6}
-                    fill="#fb923c"
+                    fill="#f59e0b"
                     stroke="#fff"
                     strokeWidth={2}
-                    style={{
-                      filter:
-                        "drop-shadow(0 0 8px rgba(251,146,60,0.8))",
-                    }}
+                    style={{ filter: "drop-shadow(0 0 8px rgba(245,158,11,0.55))" }}
                   />
                 );
               }
@@ -166,8 +138,7 @@ export default function ContributionGraph({
         </AreaChart>
       </ResponsiveContainer>
 
-      {/* GLOBAL GLOW */}
-      <div className="pointer-events-none absolute inset-0 rounded-xl shadow-[0_0_80px_rgba(59,130,246,0.15)]" />
+      <div className="pointer-events-none absolute inset-0 rounded-[1.5rem] shadow-[0_0_80px_rgba(56,189,248,0.08)]" />
     </div>
   );
 }
