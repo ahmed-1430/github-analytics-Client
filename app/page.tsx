@@ -186,7 +186,7 @@ export default function Page() {
                     value={usernameInput}
                     onChange={(event) => setUsernameInput(event.target.value)}
                     placeholder="Enter GitHub username"
-                    className={`h-12 flex-1 rounded-full border px-5 text-sm outline-none backdrop-blur-xl placeholder:text-slate-500 ${isDark ? "border-white/12 bg-white/4 text-white focus:border-cyan-300/40" : "border-slate-200 bg-white text-slate-950 focus:border-cyan-400"}`}
+                    className={`h-12 flex-1 rounded-full border px-5 py-4 text-sm outline-none backdrop-blur-xl placeholder:text-slate-500 ${isDark ? "border-white/12 bg-white/4 text-white focus:border-cyan-300/40" : "border-slate-200 bg-white text-slate-950 focus:border-cyan-400"}`}
                   />
                   <button
                     type="submit"
